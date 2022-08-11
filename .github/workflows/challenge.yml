@@ -12,7 +12,6 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }} 
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          export body=$( curl date.jsontest.com/)
-          export ip=$(echo $body | jq '.time')
-          export co=$( echo $body | jq '.date')
-          gh pr comment $PR_NUMBER --body "The time is: $ip Date to day is $co" --repo $GITHUB_REPOSITORY
+          export body=$( curl https://api.open-meteo.com/v1/forecast?latitude=51.5002&longitude=-0.1262&daily=temperature_2m_max&timezone=Europe%2FLondon&start_date=2022-08-11&end_date=2022-08-11)
+          export temp=$(echo $body | jq '.daily.temperature_2m_max[0]')
+          gh pr comment $PR_NUMBER --body "The temprature is: $temp " --repo $GITHUB_REPOSITORY
