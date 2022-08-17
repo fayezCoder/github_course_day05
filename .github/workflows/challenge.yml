@@ -1,4 +1,4 @@
-name: PR Comment
+name: weather comment
 
 on:
   pull_request:
