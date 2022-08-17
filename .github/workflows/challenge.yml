@@ -1,18 +1,19 @@
-name: PR Comment
+name: comment weather
 
 on:
   pull_request:
     branches: ["*"]
 
 jobs:
-  Comments:
+  weather:
     runs-on: ubuntu-latest
-    steps:      
-      - env:
-          PR_NUMBER: ${{ github.event.pull_request.number }} 
+    steps: 
+      - name: comment weather     
+        env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }} 
+          
         run: |
-          export body=$( curl date.jsontest.com/)
-          export ip=$(echo $body | jq '.time')
-          export co=$( echo $body | jq '.date')
-          gh pr comment $PR_NUMBER --body "The time is: $ip Date to day is $co" --repo $GITHUB_REPOSITORY
+          export body=$( curl 'https://api.open-meteo.com/v1/forecast?latitude=24.85&longitude=46.71&current_weather=true')
+          export temp=$(echo $body | jq '.current_weather.temprature')
+          gh pr comment $PR_NUMBER --body "The temprature in Riyadh is $temp" --repo $GITHUB_REPOSITORY
